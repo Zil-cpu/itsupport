@@ -288,32 +288,18 @@ document.getElementById("reportResult").innerHTML=`
 });
 }
 
+    
 function loadUsers(){
     if(!isAdmin){
         alert("Khusus admin bro!");
         return;
     }
 
-// 👇 TARUH DI SINI (SEJAJAR)
-function loadUsers(){
-   
-}
-function filterUser(user){
-    console.log("FILTER USER:", user);
-    selectedUser = user;
-    loadTickets();
-}
-
-function resetFilter(){
-    selectedUser = "";
-    loadTickets();
-}
     db.ref("tickets").once("value", snap=>{
         const users = {};
 
         snap.forEach(child=>{
             const t = child.val();
-
             if(!t.user) return;
 
             if(!users[t.user]){
@@ -328,17 +314,28 @@ function resetFilter(){
         <h4>Daftar User</h4>
         `;
 
-      for(let u in users){
-    html += `
-    <p style="cursor:pointer;" onclick="filterUser('${u}')">
-        👤 <b>${u}</b> - ${users[u]} tiket
-    </p>
-    `;
-}
-        html += `</div>`;
+        for(let u in users){
+            html += `
+            <p style="cursor:pointer;" onclick="filterUser('${u}')">
+                👤 <b>${u}</b> - ${users[u]} tiket
+            </p>`;
+        }
 
+        html += `</div>`;
         document.getElementById("userList").innerHTML = html;
     });
+}
+
+/* FILTER USER */
+function filterUser(user){
+    selectedUser = user;
+    loadTickets();
+}
+
+/* RESET FILTER (opsional) */
+function resetFilter(){
+    selectedUser = "";
+    loadTickets();
 }
 
 /* ADMIN */
