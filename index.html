@@ -121,6 +121,7 @@ th,td{
 <select id="filterBulan"></select>
 <button onclick="generateReport()">Generate Report</button>
 <div id="reportResult"></div>
+<button onclick="exportExcel()">Export Excel</button>
     
 <h3>Data User</h3>
 <button onclick="loadUsers()">Load User</button>
@@ -381,6 +382,37 @@ initBulan();
 loadTickets();
 updateClock();
 };
+
+function exportExcel(){
+    const bulan = document.getElementById("filterBulan").value;
+
+    db.ref("tickets").once("value", snap=>{
+        let csv = "No,Nama,Departemen,Deskripsi,Waktu,Status,Solusi\n";
+        let no = 1;
+
+        snap.forEach(child=>{
+            const t = child.val();
+            if(!t.createdAt) return;
+
+            const bulanData = new Date(t.createdAt).toISOString().slice(0,7);
+
+            if(bulanData === bulan){
+                csv += `${no++},"${t.nama}","${t.departemen}","${t.deskripsi}","${t.waktu}","${t.status}","${t.penyelesaian||''}"\n`;
+            }
+        });
+
+        // buat file
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "report-" + bulan + ".csv";
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+    });
+}
 </script>
 
 </body>
