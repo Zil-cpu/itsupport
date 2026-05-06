@@ -361,9 +361,18 @@ loadUsers();
 }
 
 function setUser(){
-currentUser=userLogin.value;
-infoUser.innerText="Login: "+currentUser;
-loadTickets();
+    const input = document.getElementById("userLogin").value.trim();
+
+    if(!input){
+        alert("Isi nama dulu bro!");
+        return;
+    }
+
+    currentUser = input;
+    localStorage.setItem("user", input); // simpan di browser
+
+    document.getElementById("infoUser").innerText = "Login: " + currentUser;
+    loadTickets();
 }
 
 function logout(){location.reload();}
@@ -379,9 +388,16 @@ if(confirm("Hapus?")) db.ref("tickets/"+key).remove();
 
 /* INIT */
 window.onload=()=>{
-initBulan();
-loadTickets();
-updateClock();
+    initBulan();
+    updateClock();
+
+    const savedUser = localStorage.getItem("user");
+    if(savedUser){
+        currentUser = savedUser;
+        document.getElementById("infoUser").innerText = "Login: " + currentUser;
+    }
+
+    loadTickets();
 };
 
 function exportExcel(){
