@@ -247,9 +247,14 @@ const dataBase=(img)=>{
         createdAt:Date.now(),
         waktu:new Date().toLocaleString("id-ID")
     };
-
-    db.ref("tickets").push(data);
-    document.querySelector("form").reset();
+db.ref("tickets").push(data)
+.then(()=> {
+    alert("Berhasil bro!");
+})
+.catch(err=> {
+    alert("Error: " + err);
+});
+        document.querySelector("form").reset();
 };
 
 if(file){
