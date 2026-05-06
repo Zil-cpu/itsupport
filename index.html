@@ -353,8 +353,9 @@ db.ref("config/adminPassword").once("value",snap=>{
 if(pass===snap.val()){
 isAdmin=true;
 currentUser="ADMIN";
-alert("Login Admin OK");
+alert("Login Admin OK");    
 loadTickets();
+loadUsers();
 }else alert("Salah password");
 });
 }
